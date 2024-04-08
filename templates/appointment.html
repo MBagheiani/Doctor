@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.9.0/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-screen flex flex-col justify-center items-center bg-slate-500">
+    <div class="w-[55rem] shadow p-2 rounded-lg bg-white" dir="rtl">
+        <form action="{{ url_for('appointment') }}" method="POST">
+            <div class="">
+                <label for="name">نام بیمار:</label>
+                <input type="text" id="name" name="name" required class="input input-bordered w-full">
+            </div>
+            <div class="">
+                <label for="phone">شماره تماس بیمار:</label>
+                <input type="tel" id="phone" name="phone" required class="input input-bordered w-full">
+            </div>
+            <div class="">
+                <label for="doctor_id">پزشک انتخابی:</label>
+                <select id="doctor_id" name="doctor_id" required class="select select-bordered w-full">
+                    <option value=""></option>
+                    {% for doctor in doctors %}
+                    <option value="{{doctor.id}}">{{doctor.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="">
+                <label for="date">تاریخ مدنظر :</label>
+                <input type="date" id="date" name="date" required class="input input-bordered w-full">
+            </div>
+            <div class="mt-4">
+                <button type="submit" class="btn btn-neutral">ثبت درخواست</button>
+            </div>
+        </form>
+    </div>
+  </body>
+</html>

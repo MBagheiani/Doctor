@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin page</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.9.0/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="h-screen flex flex-col justify-center items-center bg-slate-500">
+    <div class="w-3/4 grid grid-cols-2 gap-2 shadow p-2 rounded-lg bg-white">
+      <button class="btn btn-neutral" onclick="doctor_create.showModal()">
+        افزودن پزشک
+      </button>
+      <div class="col-span-2">
+        <h2 class="text-center text-3xl font-bold mt-8">
+          جدول درخواست های ارسال شده بیماران
+        </h2>
+        <table class="table text-center w-full">
+          <thead>
+            <tr>
+              <th>نام بیمار</th>
+              <th>شماره تماس بیمار</th>
+              <th>نام پزشک درخواستی</th>
+              <th>حوزه کاری پزشک درخواستی</th>
+              <th>زمان نیاز</th>
+              <th>وضعیت درخواست</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for appointment in appointments %}
+            <tr>
+              <td>{{appointment.user.name}}</td>
+              <td>{{appointment.user.phone}}</td>
+              <td>{{appointment.doctor.name}}</td>
+              <td>{{appointment.doctor.job}}</td>
+              <td>{{appointment.date}}</td>
+              <td>{{appointment.status}}</td>
+              <td>
+                {% if appointment.status == "Pending" %}
+                <div class="flex gap-2">
+                  <a
+                    href="{{url_for('appointment_approve', appointment=appointment.id)}}"
+                    class="btn btn-success"
+                    >تایید درخواست</a
+                  >
+                  <a
+                    href="{{url_for('appointment_denied', appointment=appointment.id)}}"
+                    class="btn btn-error"
+                    >رد درخواست</a
+                  >
+                </div>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <dialog id="doctor_create" class="modal">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg">افزودن پزشک!</h3>
+        <div class="py-4">
+          <form
+            action="{{ url_for('admin_create_doctor') }}"
+            method="POST"
+            class="flex flex-col space-y-4 text-right"
+          >
+            <div class="form-group">
+              <label for="name">نام پزشک:</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="input input-bordered w-full"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="job">حوزه کاری پزشک:</label>
+              <input
+                type="text"
+                id="job"
+                name="job"
+                class="input input-bordered w-full"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="phone">شماره تماس پزشک:</label>
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                class="input input-bordered w-full"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <button type="submit" class="btn btn-neutral w-full">ارسال اطلاعات</button>
+            </div>
+          </form>
+        </div>
+        <div class="modal-action">
+          <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn">بستن</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+  </body>
+</html>
